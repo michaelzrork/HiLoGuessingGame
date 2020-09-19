@@ -26,6 +26,7 @@ int main()
 		int highRange = 0;				// the number range for the game, determined later by the user
 		int lowRange = 1;				// initializing lowRange as the low end of the range
 		int tries = 0;					// variable for how many attempts the user has
+		const int triesMax = 8;			// maximum number of tries user can attempt
 		string attempts = "attempts";	// string used to change pluarality of the word when only 1 attempt remains
 
 		std::cout << "\n*********************************************************\n\n\tWELCOME TO THE HI-LO GUESSING GAME!\n"
@@ -48,15 +49,15 @@ int main()
 		int randNum = rand() % highRange + 1;	// sets random number range from 1 through the user input
 		
 		// Determin number of attempts for the game
-		while (tries < 1 || tries > 8)	// loops until user inputs a number in the correct range
+		while (tries < 1 || tries > triesMax)	// loops until user inputs a number in the correct range
 		{
-			cout << "How many attempts would you like? (choose between 1 and 8): ";
+			cout << "How many attempts would you like? (choose between 1 and " << triesMax << "): ";
 			cin >> tries;				
 
 			// error message if user chooses outside allowed attempts
-			if (tries > 8 || tries < 1)
+			if (tries > triesMax || tries < 1)
 			{
-				cout << "\nSorry, that is outside the range of 1-8.\n";
+				cout << "\nSorry, that is outside the range of 1-" << triesMax <<".\n";
 			}
 
 		}
