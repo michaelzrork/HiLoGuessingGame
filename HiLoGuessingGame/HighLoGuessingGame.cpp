@@ -28,7 +28,7 @@ int main()
 		int tries = 0;					// variable for how many attempts the user has
 		string attempts = "attempts";	// string used to change pluarality of the word when only 1 attempt remains
 
-		cout << "\n*********************************************************\n\n\tWELCOME TO THE HI-LO GUESSING GAME!\n"
+		std::cout << "\n*********************************************************\n\n\tWELCOME TO THE HI-LO GUESSING GAME!\n"
 			<< "\n*********************************************************\n"
 			<< "\nGuess the number I'm thinking of before you run out of attempts.\nGood luck!\n";
 		
