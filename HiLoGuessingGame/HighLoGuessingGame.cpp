@@ -12,70 +12,145 @@ using namespace std;
 
 int main()
 {
-	srand(time(NULL)); //calls for a random number each time the program is run
-	int randNum = rand() % 100 + 1; //sets random number to 1-100
-	int guess = 0; //declare and initialize variable for the user's guess
-	int tries = 5; //declare and initialize the variable for how many tries the user has
-
-	cout << "Welcome to the Hi-Lo Game!\nHow many tries would you like? ";
-	cin >> tries; //sets the number of tries the user has
-
-	int triesCount = tries - 1; //used for calculating how many tries the user has left
-
-	for (int i = 0;i < tries; i++) //loop for as many tries as the user inputs
+	// begin by setting the game to loop as long as playAgain is set to 'y'
+	char playAgain = 'y';
+	while (playAgain == 'y' || playAgain == 'Y')
 	{
-		cout << "\nWhat number am I thinking of?\nPlease enter 1 - 100 (enter 0 to end): ";
-		cin >> guess;
-		if (guess > 100 || guess < 0) //first check to see if the value is within the expected range
-		{
-			cout << "\nThat's outside the range of 1-100";
-			if (i != triesCount) //if there are tries left...
-			{
-				cout << ". Let's try again! You have " << triesCount - i << " more tries!\n"; //calculate how many are left
-			}
-			else
-			{
-				cout << ", and you are out of tries!\n"; //if not, tell the user they are out of tries
-			}
-		}	
-		else if (guess == 0) // check if the user wants to end
-		{
-			break;
-		}
-		else if (guess == randNum) //check if the guess is correct
-		{
-			cout << "\nWow! You guessed correctly!\n\nYou guessed: " << guess;
-			break; //if they guessed correctly, end the loop
-		}
-		else if (guess > randNum) //check if the guess is too high
-		{
-			cout << "\nHmm. That's a bit too high";
-			if (i != triesCount)
-			{
-				cout << ". Let's try again! You have " << triesCount - i << " more tries!\n";
-			}
-			else
-			{
-				cout << ", and you are out of tries!\n";
-			}
-		}
-		else if (guess < randNum) //check if the guess is too low
-		{
-			cout << "\nHmm. That's a bit too low";
-			if (i != triesCount)
-			{
-				cout << ". Let's try again! You have " << triesCount - i << " more tries!\n";
-			}
-			else
-			{
-				cout << ", and you are out of tries!\n";
-			}
-		}
-		else //in case something doesn't work right, say something went wrong
-		{
-			cout << "\nHuh. Something went wrong... please try again! (You have " << triesCount - i << " more tries!)\n";
-		}
-	}
+		/****************************
+			SETTING UP THE GAME
+		****************************/
 
-	cout << "\nThe random number is: " << randNum << endl;
+		// initializing and declaring all necessary variables
+		int triesCount = 0;				// used for calculating how many attempts the user has left
+		int guess = 0;					// variable for the user's guess
+		int highRange = 0;				// the number range for the game, determined later by the user
+		int lowRange = 1;				// initializing lowRange as the low end of the range
+		int tries = 0;					// variable for how many attempts the user has
+		string attempts = "attempts";	// string used to change pluarality of the word when only 1 attempt remains
+
+		cout << "\n*********************************************************\n\n\tWELCOME TO THE HI-LO GUESSING GAME!\n"
+			<< "\n*********************************************************\n"
+			<< "\nGuess the number I'm thinking of before you run out of attempts.\nGood luck!\n";
+		
+		// User determins the range of the game
+		while (highRange < 10)
+		{
+			cout << "\nChoose a range of numbers to guess from (min of 10): 1 - ";
+			cin >> highRange;
+			if (highRange < 10) // only allow a range of 10 or higher
+			{
+				cout << "\nSorry, that's too low. Pleae choose a range of 10 or higher.";
+			}
+		}
+		
+		// Call for the random number within the user determined range
+		srand(time(NULL));						// calls for a random number each time the program is run
+		int randNum = rand() % highRange + 1;	// sets random number range from 1 through the user input
+		
+		// Determin number of attempts for the game
+		while (tries < 1 || tries > 8)	// loops until user inputs a number in the correct range
+		{
+			cout << "How many attempts would you like? (choose between 1 and 8): ";
+			cin >> tries;				
+
+			// error message if user chooses outside allowed attempts
+			if (tries > 8 || tries < 1)
+			{
+				cout << "\nSorry, that is outside the range of 1-8.\n";
+			}
+
+		}
+
+		/****************************
+			THE GAME BEGINS
+		****************************/
+
+		cout << "\n**************** GREAT! NOW LET'S BEGIN! ****************\n" 
+			<< "\nWHAT NUMBER AM I THINKING OF?\n";
+		
+		// Loop until the user runs out of tries, guesses the correct answer, or stops the program
+		triesCount = tries - 1;			// allows for loop to check how many tries are left
+		for (int i = 0; i < tries; i++)	// loop for as many tries as the user inputs
+		{
+			// Check if there is only 1 attempt remaining and change plurality of word
+			if (triesCount - i == 1)
+			{
+				attempts = "attempt";
+			}
+			
+			// Prompt the user to guess the number and display the range the user can guess from
+			// lowRange and highRange start as the lower and upper limits, and adjust as the user plays
+			cout << "Please enter a number from " << lowRange << " - " << highRange << " (enter 0 to end): ";
+			cin >> guess;
+			
+			// Check if the user wants to stop
+			if (guess == 0)
+			{
+				break;
+			}
+
+			// Check to see if the value is within the expected range
+			else if (guess > highRange || guess < lowRange)
+			{
+				cout << "\nThat's outside the range of " << lowRange << " - " << highRange;
+				if (i != triesCount)	// if there are tries left calc how many remain
+				{
+					cout << ". You have " << triesCount - i << " more " << attempts << "!\n";
+				}
+				else
+				{
+					cout << ", and you are out of attempts!\n";
+				}
+			}
+
+			// Check if the user's guess is correct
+			else if (guess == randNum)
+			{
+				cout << "\nWow! You guessed correctly! (with only " << tries - (triesCount - i) << " " << attempts << "!)\n\nYou guessed: " << guess << "\n";
+				break;					//if they guessed correctly, end the loop
+			}
+			
+			// Check if the guess is too high
+			else if (guess > randNum)
+			{
+				highRange = guess - 1;	// lowers the top range to 1 below the previous high guess
+				cout << "\nThat's a bit too high";
+				if (i != triesCount)
+				{
+					cout << ". You have " << triesCount - i << " more " << attempts << "!\n";
+				}
+				else
+				{
+					cout << ", and you are out of attempts!\n";
+				}
+			}
+
+			// Check if the guess is too low
+			else if (guess < randNum)
+			{
+				lowRange = guess + 1;	// raises the low range to 1 above the previous low guess
+				cout << "\nThat's a bit too low";
+				if (i != triesCount)
+				{
+					cout << ". You have " << triesCount - i << " more " << attempts << "!\n";
+				}
+				else
+				{
+					cout << ", and you are out of attempts!\n";
+				}
+			}
+
+			// Error message if something didn't work right
+			else
+			{
+				cout << "\nSomething went wrong. Please try again!\n(You have " << triesCount - i << " more " << attempts << "!)\n";
+			}
+		}
+
+		cout << "The random number was: " << randNum << endl
+			<< "\nWould you like to play again? (please enter 'y' or 'n') ";	// ask if user would like to play again
+		cin >> playAgain;														// if answer is anything other than y or Y, program ends
+		cout << endl;
+	}
+	return 0;
 }
